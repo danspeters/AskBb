@@ -32,35 +32,16 @@ server.post('/api/messages', connector.listen());
 // Bots Dialogs
 //=========================================================
 
-
-// Add first run dialog
-bot.dialog('firstRun', function (session) {  
-    // Set firstRun flag to avoid being re-started every message.
-    session.userData.firstRun = true; 
-    session.send("Hello...").endDialog();
-}).triggerAction({
-    onFindAction: function (context, callback) {
-        // Only trigger if we've never seen user before
-        if (!context.userData.firstRun) {
-            // Return a score of 1.1 to ensure the first run dialog wins
-            callback(null, 1.1);
-        } else {
-            callback(null, 0.0);
-        }
-    }
-});
-
 //Ask Bb KnowledgeBaseID and Authkey for the relevant Ask Bb KB on www.qnamaker.ai 
 var recognizer = new cognitiveservices.QnAMakerRecognizer({
     knowledgeBaseId: '70647a58-8b5b-4309-a8f3-9776602c0b97',
-    authKey: 'bc3f7b4a-7da8-4a4b-bb59-4635c6c4ef91',
-    top: 3});
+    authKey: 'bc3f7b4a-7da8-4a4b-bb59-4635c6c4ef91'
+});
 
 //The QnA Maker tools needs to be initialized and added to the bot.libraries. 
 //If this is not registered, the QnA dialog is unaware of the feedback dialog 
 //and it will behave as the simple QnA bot returning one response.
-var qnaMakerTools = new cognitiveservices.QnAMakerTools();
-bot.library(qnaMakerTools.createLibrary());
+
 var basicQnAMakerDialog = new cognitiveservices.QnAMakerDialog({
     recognizers: [recognizer],
     defaultMessage: 'No match! Try changing the query terms!',
