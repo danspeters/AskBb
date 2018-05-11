@@ -10,10 +10,10 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
 
 // Create chat connector for communicating with the Bot Framework Service
 var connector = new builder.ChatConnector({
-//    appId: null,
-//    appPassword: null
-    appId: process.env.MicrosoftAppId,
-    appPassword: process.env.MicrosoftAppPassword
+    appId: null,
+    appPassword: null
+//    appId: process.env.MicrosoftAppId,
+//    appPassword: process.env.MicrosoftAppPassword
 });
 
 // Listen for messages from users 
@@ -41,6 +41,8 @@ var recognizer = new cognitiveservices.QnAMakerRecognizer({
 //The QnA Maker tools needs to be initialized and added to the bot.libraries. 
 //If this is not registered, the QnA dialog is unaware of the feedback dialog 
 //and it will behave as the simple QnA bot returning one response.
+var qnaMakerTools = new cognitiveservices.QnAMakerTools();
+bot.library(qnaMakerTools.createLibrary());
 
 var basicQnAMakerDialog = new cognitiveservices.QnAMakerDialog({
     recognizers: [recognizer],
